@@ -19,7 +19,33 @@ Where:
 
 ---
 
-### 2. TESTROM.ASM
+### 2. DIAGNOSE.ASM
+**Purpose:** Diagnostic tool to isolate ROM reading issues and verify display routines
+
+**Output:**
+```
+========================================
+ROM Diagnostic Tool
+========================================
+
+Test 1 - Display EB 34:     EB 34
+Test 2 - Port FFEA:         XX
+Test 3 - E000:0000-0003:    EB 34 90 54
+Verify - Reverse order:     54 90 34 EB
+Test 4 - Using ES segment:  EB 34
+Test 5 - After bit 4 set:   YY ZZ
+```
+
+**Use Case:**
+- Verify DisplayHex routine works with known values (EB, 34)
+- Test reading from E000:0000 using both DS and ES segments
+- Read multiple bytes to confirm ROM signature
+- Verify values are preserved on stack
+- Test Port FFEA bit 4 effect on ROM access
+
+---
+
+### 3. TESTROM.ASM
 **Purpose:** Comprehensive test that checks ROM content before/after Port FFEA bit 4 is set
 
 **Output:**

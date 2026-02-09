@@ -27,6 +27,14 @@ TLINK /T TESTROM.OBJ
 IF ERRORLEVEL 1 GOTO error_testrom
 ECHO   SUCCESS: TESTROM.COM created
 
+REM Build DIAGNOSE.COM
+ECHO Building DIAGNOSE.COM...
+TASM DIAGNOSE.ASM
+IF ERRORLEVEL 1 GOTO error_diagnose
+TLINK /T DIAGNOSE.OBJ
+IF ERRORLEVEL 1 GOTO error_diagnose
+ECHO   SUCCESS: DIAGNOSE.COM created
+
 REM Clean up intermediate files
 DEL *.OBJ >NUL 2>&1
 DEL *.MAP >NUL 2>&1
@@ -45,6 +53,10 @@ GOTO end
 
 :error_testrom
 ECHO ERROR: Failed to build TESTROM.COM
+GOTO end
+
+:error_diagnose
+ECHO ERROR: Failed to build DIAGNOSE.COM
 GOTO end
 
 :end
