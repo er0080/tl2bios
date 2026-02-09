@@ -55,7 +55,8 @@ DisplayHex PROC
 
     ; Display high nibble
     mov dl, al
-    shr dl, 4
+    mov cl, 4
+    shr dl, cl
     add dl, '0'
     cmp dl, '9'
     jbe @high_ok

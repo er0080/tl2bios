@@ -104,7 +104,8 @@ DisplayHex PROC
     push ax
 
     ; Display high nibble
-    shr al, 4
+    mov cl, 4
+    shr al, cl
     call DisplayNibble
 
     ; Display low nibble
