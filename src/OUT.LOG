@@ -1,0 +1,13 @@
+
+========================================
+ROM Diagnostic Tool
+========================================
+
+Test 1 - Display EB 34:     EB 34
+Test 2 - Port FFEA:         C8
+Test 3 - E000:0000-0003:    EB 01 02 03
+Verify - Reverse order:     02 01 EB 00
+Test 4 - Using ES segment:  EB 34
+Test 5 - After bit 4 set:   D8 FF
+
+Diagnostic complete.

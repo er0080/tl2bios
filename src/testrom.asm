@@ -40,11 +40,9 @@ start:
     mov ah, 09h
     int 21h
 
-    push ds
     mov ax, 0E000h
-    mov ds, ax
-    mov al, [0]             ; Read first byte at E000:0000
-    pop ds
+    mov es, ax
+    mov al, es:[0]          ; Read first byte at E000:0000
     call DisplayHex
     call NewLine
 
@@ -68,11 +66,9 @@ start:
     mov ah, 09h
     int 21h
 
-    push ds
     mov ax, 0E000h
-    mov ds, ax
-    mov al, [0]             ; Read first byte at E000:0000 again
-    pop ds
+    mov es, ax
+    mov al, es:[0]          ; Read first byte at E000:0000 again
     call DisplayHex
     call NewLine
 
