@@ -9,6 +9,7 @@ ECHO ========================================
 REM Clean up old files
 IF EXIST *.OBJ DEL *.OBJ
 IF EXIST *.COM DEL *.COM
+IF EXIST *.SYS DEL *.SYS
 IF EXIST *.MAP DEL *.MAP
 
 REM Build PORTREAD.COM
@@ -35,6 +36,15 @@ TLINK /T DIAGNOSE.OBJ
 IF ERRORLEVEL 1 GOTO error_diagnose
 ECHO   SUCCESS: DIAGNOSE.COM created
 
+REM Build NOROM.SYS
+ECHO Building NOROM.SYS...
+TASM NOROM.ASM
+IF ERRORLEVEL 1 GOTO error_norom
+TLINK /T NOROM.OBJ
+IF ERRORLEVEL 1 GOTO error_norom
+REN NOROM.COM NOROM.SYS
+ECHO   SUCCESS: NOROM.SYS created
+
 REM Clean up intermediate files
 DEL *.OBJ >NUL 2>&1
 DEL *.MAP >NUL 2>&1
@@ -43,7 +53,7 @@ ECHO ========================================
 ECHO Build Complete!
 ECHO ========================================
 ECHO Created files:
-DIR /B *.COM
+DIR /B *.COM *.SYS
 ECHO Ready to test on Tandy 1000 TL/2
 GOTO end
 
@@ -57,6 +67,10 @@ GOTO end
 
 :error_diagnose
 ECHO ERROR: Failed to build DIAGNOSE.COM
+GOTO end
+
+:error_norom
+ECHO ERROR: Failed to build NOROM.SYS
 GOTO end
 
 :end

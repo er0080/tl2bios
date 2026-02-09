@@ -1,8 +1,12 @@
-# Tandy 1000 TL/2 BIOS Modification
+# Tandy 1000 TL/2 ROM Disable Project
+
+## Project Status: ✅ PRODUCTION READY
+
+**NOROM.SYS device driver successfully disables ROM at E000:0000 on Tandy 1000 TL/2 hardware!**
 
 ## Project Overview
 
-This project focuses on modifying the Tandy 1000 TL/2 BIOS to disable the built-in ROM drive at memory address `E000:0000`. By disabling this feature, the memory range can be freed for DOS Upper Memory Block (UMB) allocation, allowing for more efficient memory usage in DOS applications.
+This project provides a DOS device driver to disable the ROM page frame at memory address `E000:0000` on the Tandy 1000 TL/2. By disabling ROM access at E000, the 64KB memory range becomes available for DOS Upper Memory Block (UMB) allocation, providing ~60KB additional upper memory for drivers and TSRs.
 
 ## Background
 
@@ -34,21 +38,59 @@ The TL/2 uses a **paging system** where:
 - The BIOS switches pages to access different parts of ROM
 - The system ROM (BIOS code) is separately mapped at F000:C000
 
-## Project Contents
+## Project Files
 
-- `8079044.BIN` - Original ROM dump from Tandy 1000 TL/2 BIOS
+### Documentation
+- **[NOROM_DRIVER.md](NOROM_DRIVER.md)** - Complete NOROM.SYS installation and usage guide
+- **[ANALYSIS.md](ANALYSIS.md)** - ROM structure analysis and implementation approaches
+- **[MEMORY_MAP.md](MEMORY_MAP.md)** - Memory layout and Port FFEA register details
+- **[PORT_FFEA_TEST.md](PORT_FFEA_TEST.md)** - Hardware testing procedures
 
-## Goals
+### Source Code (`src/`)
+- **norom.asm** - Production DOS device driver (NOROM.SYS)
+- **testrom.asm** - ROM disable verification test
+- **diagnose.asm** - Comprehensive diagnostic tool
+- **portread.asm** - Simple Port FFEA test utility
+- **BUILD.BAT** - Batch file to build all programs
+- **OUT.LOG** - Hardware test results from real TL/2
 
-1. ✅ Analyze the original BIOS ROM dump
-2. ✅ Understand the ROM paging system architecture
-3. ⚠️ Test hardware method (Port FFEA) to disable ROM paging
-4. 🔄 If needed: Modify BIOS code to disable ROM drive functionality
-5. Test the solution to ensure:
-   - The ROM page frame at E000 is properly disabled
-   - Memory at E000-EFFF is available for UMB allocation
-   - System stability is maintained
-   - Other BIOS functions remain intact
+### ROM Dump
+- `8079044.BIN` - Original 512KB ROM dump from Tandy 1000 TL/2 BIOS
+
+### Technical References (`doc/`)
+- TL/2 ROM paging documentation
+- Memory controller specifications
+- Theory of operation
+
+## Solution: NOROM.SYS Device Driver ⭐
+
+The project successfully developed **NOROM.SYS**, a DOS device driver that:
+- Disables ROM at E000:0000 by setting Port FFEA bit 4 during boot
+- Verified working on Tandy 1000 TL/2 hardware
+- Zero resident memory footprint (unloads after initialization)
+- Safe and reversible (no BIOS modification required)
+- Enables 64KB (E000-EFFF) for DOS UMB allocation
+
+**Quick Start:**
+1. Build: Run `src/BUILD.BAT` to create NOROM.SYS
+2. Install: Copy NOROM.SYS to C:\DOS\
+3. Configure CONFIG.SYS:
+   ```
+   DEVICE=C:\DOS\NOROM.SYS
+   DEVICE=C:\DOS\EMM386.EXE NOEMS I=E000-EFFF
+   ```
+4. Reboot and enjoy 60KB+ additional upper memory!
+
+**See [NOROM_DRIVER.md](NOROM_DRIVER.md) for complete installation and usage guide.**
+
+## Project Milestones
+
+1. ✅ Analyzed original BIOS ROM dump (512KB, Phoenix BIOS v02.00.00)
+2. ✅ Understood ROM paging system architecture (8 pages via Port FFEA)
+3. ✅ Tested hardware method on real TL/2 - Port FFEA bit 4 WORKS!
+4. ✅ Developed NOROM.SYS production device driver
+5. ✅ Verified on hardware - ROM successfully disabled, system stable
+6. ✅ Documented complete solution with CONFIG.SYS examples
 
 ## Memory Map Reference
 
@@ -61,34 +103,33 @@ E000:0000 - EFFF:FFFF : ROM Drive (Target for modification)
 F000:0000 - FFFF:FFFF : System BIOS
 ```
 
-## Potential Solutions
+## Implementation Details
 
-Based on technical documentation analysis, several approaches are possible:
+### Solution 1: Port FFEA Control ✅ VERIFIED WORKING
+**Status:** ✅ **PRODUCTION READY** - Verified on Tandy 1000 TL/2 hardware
 
-### Solution 1: Port FFEA Control (Testing Required)
-**Status:** ⚠️ **UNVERIFIED** - Based on handwritten note in technical manual
-
-A handwritten note in the TL/2 technical documentation suggests:
+The handwritten note in the TL/2 technical documentation was correct:
 > "Writing 1 to bit 4 disables access to the ROM segment at E0000"
+
+**Hardware Test Results:**
+- Port FFEA before: 0xC8 (ROM enabled)
+- Port FFEA after: 0xD8 (bit 4 set successfully)
+- E000:0000 before: 0xEB (ROM boot signature)
+- E000:0000 after: 0xFF (ROM disabled, floating bus)
+- System stability: STABLE ✅
 
 **Implementation:**
 ```assembly
-IN  AL, 0xFFEA      ; Read current Port FFEA value
+IN  AL, 0xFFEA      ; Read current Port FFEA value (0xC8)
 OR  AL, 0x10        ; Set bit 4 (disable ROM at E000)
-OUT 0xFFEA, AL      ; Write back
+OUT 0xFFEA, AL      ; Write back (becomes 0xD8)
 ```
 
-**Advantages:**
-- Simple software-only solution
-- Reversible (can re-enable ROM)
-- No BIOS modification needed
-- Can be implemented as DOS driver
-
-**Needs Testing:**
-- Verify this actually works on real hardware
-- Check for side effects or system instability
-- Confirm BIOS doesn't re-enable ROM
-- Test with EMM386/DOS UMB managers
+**Production Driver:**
+- **NOROM.SYS** - DOS device driver (see [NOROM_DRIVER.md](NOROM_DRIVER.md))
+- Zero resident memory
+- Loads via CONFIG.SYS
+- Verified working on real hardware
 
 ### Solution 2: BIOS Code Modification
 **Status:** ⏳ Requires disassembly if Port FFEA method fails

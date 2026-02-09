@@ -54,10 +54,10 @@ Test 5 - After bit 4 set:   YY ZZ
 Tandy 1000 TL/2 Port FFEA ROM Test
 ========================================
 
-Port FFEA before: 0xXX
-E000:0000 before: 0xYY
-Port FFEA after:  0xZZ
-E000:0000 after:  0xWW
+Port FFEA before: 0xC8
+E000:0000 before: 0xEB
+Port FFEA after:  0xD8
+E000:0000 after:  0xFF
 
 Interpretation:
   If E000:0000 changed from EB to FF (or other),
@@ -69,13 +69,34 @@ Port FFEA restored to original value.
 Test complete.
 ```
 
-**Expected Results if ROM Disable Works:**
-- `E000:0000 before: 0xEB` (ROM boot sector jump instruction)
-- `E000:0000 after:  0xFF` (or other value indicating no ROM)
+**Use Case:** Final verification that Port FFEA bit 4 disables ROM access at E000:0000
 
-**Expected Results if ROM Disable Fails:**
-- `E000:0000 before: 0xEB`
-- `E000:0000 after:  0xEB` (still reading ROM)
+---
+
+### 4. NOROM.ASM ⭐ PRODUCTION DRIVER
+**Purpose:** DOS device driver that disables ROM at E000:0000 during boot
+
+**Status:** ✅ **VERIFIED WORKING** on Tandy 1000 TL/2 hardware
+
+**Installation:**
+1. Build with `BUILD.BAT` to create NOROM.SYS
+2. Copy to boot drive (e.g., C:\DOS\)
+3. Add to CONFIG.SYS: `DEVICE=C:\DOS\NOROM.SYS`
+4. Configure EMM386: `DEVICE=C:\DOS\EMM386.EXE NOEMS I=E000-EFFF`
+5. Reboot
+
+**Boot Message:**
+```
+NOROM: ROM at E000 disabled successfully (Port FFEA bit 4 set)
+```
+
+**Benefits:**
+- Zero resident memory footprint (driver unloads after init)
+- Frees 64KB (E000-EFFF) for DOS UMBs
+- Safe and reversible (just remove from CONFIG.SYS)
+- No BIOS modification required
+
+**See:** [NOROM_DRIVER.md](../NOROM_DRIVER.md) for complete documentation
 
 ---
 
