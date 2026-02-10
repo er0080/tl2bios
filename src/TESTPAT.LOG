@@ -1,0 +1,17 @@
+
+========================================
+Port FFEA Pattern Test - Diagnostic
+========================================
+
+Original Port FFEA: 0x24
+
+Test 1 (bits 0-3=1111): 0x22 -> 0x2F -> 0x56
+Test 2 (bit 4 only):    0x22 -> 0x32 -> 0x22
+
+Test 3 (valid patterns from table):
+  Pattern 0x01 -> 0x22 -> 0x22
+  Pattern 0x09 -> 0x22 -> 0x22
+  Pattern 0x00 -> 0x22 -> 0x22
+
+Final Port FFEA: 0x22
+E000:0000: 0x01
