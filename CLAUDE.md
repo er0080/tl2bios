@@ -116,10 +116,10 @@ The driver uses standard DOS device driver structure with Strategy/Interrupt rou
 ### Documentation Files
 
 - **README.md** - Project overview and quick start
-- **NOROM_DRIVER.md** - Complete NOROM.SYS installation guide
-- **ANALYSIS.md** - ROM structure analysis and approach evaluation
-- **MEMORY_MAP.md** - Detailed memory layout and Port FFEA documentation
-- **PORT_FFEA_TEST.md** - Hardware testing procedures
+- **doc/NOROM_DRIVER.md** - Complete NOROM.SYS installation guide
+- **doc/ANALYSIS.md** - ROM structure analysis and approach evaluation
+- **doc/MEMORY_MAP.md** - Detailed memory layout and Port FFEA documentation
+- **doc/PORT_FFEA_TEST.md** - Hardware testing procedures
 
 ### Data Files
 

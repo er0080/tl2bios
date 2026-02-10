@@ -10,7 +10,7 @@ The ROM at E000:0000 **cannot be disabled via software**. The ROMCS (ROM Chip Se
 
 **To free E000 for DOS UMBs requires physical hardware modification.**
 
-See **[HARDWARE_MOD_GUIDE.md](HARDWARE_MOD_GUIDE.md)** for detailed modification instructions.
+See **[HARDWARE_MOD_GUIDE.md](doc/HARDWARE_MOD_GUIDE.md)** for detailed modification instructions.
 
 ## Project Overview
 
@@ -51,11 +51,11 @@ We conclusively determined that software-based ROM disable is not possible due t
 
 ### Key Documentation
 
-- **[MEMORY_CONTROLLER_ANALYSIS.md](MEMORY_CONTROLLER_ANALYSIS.md)** - Complete analysis of why software solution is impossible
-- **[HARDWARE_MOD_GUIDE.md](HARDWARE_MOD_GUIDE.md)** - Step-by-step hardware modification instructions
-- **[BIOS_ANALYSIS.md](BIOS_ANALYSIS.md)** - BIOS code analysis and Port FFEA references
-- **[TESTPAT_FINDINGS.md](TESTPAT_FINDINGS.md)** - Hardware test results and Port FFEA behavior
-- **[BITS_0_3_THEORY.md](BITS_0_3_THEORY.md)** - Investigation of ROM paging table patterns
+- **[MEMORY_CONTROLLER_ANALYSIS.md](doc/MEMORY_CONTROLLER_ANALYSIS.md)** - Complete analysis of why software solution is impossible
+- **[HARDWARE_MOD_GUIDE.md](doc/HARDWARE_MOD_GUIDE.md)** - Step-by-step hardware modification instructions
+- **[BIOS_ANALYSIS.md](doc/BIOS_ANALYSIS.md)** - BIOS code analysis and Port FFEA references
+- **[TESTPAT_FINDINGS.md](doc/TESTPAT_FINDINGS.md)** - Hardware test results and Port FFEA behavior
+- **[BITS_0_3_THEORY.md](doc/BITS_0_3_THEORY.md)** - Investigation of ROM paging table patterns
 
 ## Background
 
@@ -90,10 +90,10 @@ The TL/2 uses a **paging system** where:
 ## Project Files
 
 ### Documentation
-- **[NOROM_DRIVER.md](NOROM_DRIVER.md)** - Complete NOROM.SYS installation and usage guide
-- **[ANALYSIS.md](ANALYSIS.md)** - ROM structure analysis and implementation approaches
-- **[MEMORY_MAP.md](MEMORY_MAP.md)** - Memory layout and Port FFEA register details
-- **[PORT_FFEA_TEST.md](PORT_FFEA_TEST.md)** - Hardware testing procedures
+- **[NOROM_DRIVER.md](doc/NOROM_DRIVER.md)** - Complete NOROM.SYS installation and usage guide
+- **[ANALYSIS.md](doc/ANALYSIS.md)** - ROM structure analysis and implementation approaches
+- **[MEMORY_MAP.md](doc/MEMORY_MAP.md)** - Memory layout and Port FFEA register details
+- **[PORT_FFEA_TEST.md](doc/PORT_FFEA_TEST.md)** - Hardware testing procedures
 
 ### Source Code (`src/`)
 - **norom.asm** - Production DOS device driver (NOROM.SYS)
@@ -126,7 +126,7 @@ The NOROM.SYS driver and all Port FFEA manipulation attempts failed because:
 
 The **only** way to disable ROM at E000 is to physically disconnect the ROMCS (ROM Chip Select) signal.
 
-**See [HARDWARE_MOD_GUIDE.md](HARDWARE_MOD_GUIDE.md) for detailed instructions on:**
+**See [HARDWARE_MOD_GUIDE.md](doc/HARDWARE_MOD_GUIDE.md) for detailed instructions on:**
 - Cutting ROMCS trace on motherboard
 - Lifting ROM chip pins
 - Installing toggle switch for reversible control
@@ -223,7 +223,7 @@ Analysis of memory controller revealed:
 3. **Install toggle switch** in ROMCS# path (reversible, can switch modes)
 4. **GAL-based override** circuit (advanced, fully programmable)
 
-**See [HARDWARE_MOD_GUIDE.md](HARDWARE_MOD_GUIDE.md) for complete instructions.**
+**See [HARDWARE_MOD_GUIDE.md](doc/HARDWARE_MOD_GUIDE.md) for complete instructions.**
 
 ## Development Status
 
@@ -256,7 +256,7 @@ This project requires physical modification to your Tandy 1000 TL/2 motherboard:
 - **Requires electronics experience** - soldering, trace identification, continuity testing
 
 **Before attempting hardware modification:**
-- Read [HARDWARE_MOD_GUIDE.md](HARDWARE_MOD_GUIDE.md) completely
+- Read [HARDWARE_MOD_GUIDE.md](doc/HARDWARE_MOD_GUIDE.md) completely
 - Ensure you have proper tools (multimeter, hobby knife, magnifier)
 - Create DOS boot disk for recovery
 - Backup ROM dump (already included: 8079044.BIN)
